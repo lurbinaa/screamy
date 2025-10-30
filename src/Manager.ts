@@ -2,8 +2,8 @@ import { RedisClient } from "bun";
 import { Bot } from "@bot";
 import { Database } from "@lib/database";
 import { requiresInitGetter, InitializableClass } from "@lib/decorators";
-import type { ManagerInitOptions } from "@lib/types";
 import { isProduction } from "./lib/core";
+import type { ManagerInitOptions } from "@lib/types";
 
 export class Manager extends InitializableClass {
     /*      instances */

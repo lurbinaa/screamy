@@ -1,7 +1,6 @@
 import { sql } from "bun";
 import fs from "node:fs/promises";
 import { Manager } from '@manager';
-import { isProduction } from "@lib/core";
 import { MembersModel } from './models';
 
 export class Database {
