@@ -1,0 +1,7 @@
+node_modules/
+.vscode/
+logs/
+._*
+.env
+test.js
+test.ts
