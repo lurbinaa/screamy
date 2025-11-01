@@ -7,7 +7,7 @@ export class MembersModel extends BaseModel {
     public constructor(manager: Manager) {
         super({
             logContext: 'Members',
-            cacheKey: 'members',
+            cacheKey: 'member',
             managerInstance: manager
         });
     }
@@ -18,10 +18,8 @@ export class MembersModel extends BaseModel {
         if (cachedData) return JSON.parse(cachedData);
 
         const [member] = await sql<Member[]>`
-            SELECT *
-            FROM members
-            WHERE discord_id = ${discordId} AND guild_id = ${guildId}
-        `;
+            SELECT * FROM members
+            WHERE discord_id = ${discordId} AND guild_id = ${guildId}`;
 
         if (!member) return null;
 
@@ -29,23 +27,7 @@ export class MembersModel extends BaseModel {
         return member;
     }
 
-    async exists(discordId: string, guildId: string): Promise<boolean> {
-        if (await this.manager.redis.exists(
-            this.generateCacheKey(discordId, guildId)
-        )) return true;
-
-        const [result] = await sql<Exists[]>`
-            SELECT EXISTS(
-                SELECT 1
-                FROM members
-                WHERE discord_id = ${discordId} AND guild_id = ${guildId}
-            )
-        `;
-
-        return Boolean(result?.exists);
-    }
-
-    async create(discordId: string, guildId: string): Promise<Member | null> {
+    async insert(discordId: string, guildId: string): Promise<Member | null> {
         try {
             const memberData: MemberInsert = {
                 discord_id: discordId,
@@ -53,11 +35,8 @@ export class MembersModel extends BaseModel {
                 player_id: null
             };
             const [member] = await sql<Member[]>`
-                INSERT INTO members ${sql(memberData)}
-                ON CONFLICT (discord_id, guild_id)
-                DO UPDATE SET discord_id = EXCLUDED.discord_id
-                RETURNING *
-            `;
+            INSERT INTO members ${sql(memberData)}
+            RETURNING *`;
 
             await this.manager.redis.set(
                 this.generateCacheKey(discordId, guildId),
@@ -71,13 +50,26 @@ export class MembersModel extends BaseModel {
         }
     }
 
-
     /** inserts if the row doesn't exist */
     async forceGet(discordId: string, guildId: string): Promise<Member> {
         const existing = await this.get(discordId, guildId);
         if (existing) return existing;
 
-        const member = await this.create(discordId, guildId);
+        const member = await this.insert(discordId, guildId);
         return member!;
+    }
+
+    async exists(discordId: string, guildId: string): Promise<boolean> {
+        if (await this.manager.redis.exists(
+            this.generateCacheKey(discordId, guildId)
+        )) return true;
+
+        const [result] = await sql<Exists[]>`
+            SELECT EXISTS(
+                SELECT 1 FROM members
+                WHERE discord_id = ${discordId} AND guild_id = ${guildId}
+            )`;
+
+        return Boolean(result?.exists);
     }
 }

@@ -9,7 +9,7 @@ export class Database {
         this.manager = manager;
     }
 
-    get Members() {
+    get Members(): MembersModel {
         if (!this._members) {
             this._members = new MembersModel(this.manager);
         }
@@ -17,7 +17,7 @@ export class Database {
         return this._members;
     }
 
-    public async migrate() {
+    public async migrate(): Promise<void> {
         const files = await readdir('migrations');
 
         for (const file of files) {
