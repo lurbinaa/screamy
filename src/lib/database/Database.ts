@@ -1,5 +1,5 @@
 import { sql } from "bun";
-import fs from "node:fs/promises";
+import { readdir } from "node:fs/promises";
 import { Manager } from '@manager';
 import { MembersModel } from './models';
 
@@ -18,7 +18,7 @@ export class Database {
     }
 
     public async migrate() {
-        const files = await fs.readdir(`${import.meta.url}/migrations`);
+        const files = await readdir('migrations');
 
         for (const file of files) {
             if (!file.endsWith('.sql')) continue;
