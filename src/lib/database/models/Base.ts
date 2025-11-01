@@ -1,6 +1,6 @@
 import type { BaseModelConfig } from "@lib/types";
 import { type Logger, withContext } from "@lib/core/logger";
-import type { Manager } from "@/Manager";
+import type { Manager } from "@manager";
 
 export abstract class BaseModel {
     private cacheKey: string;

@@ -1,4 +1,4 @@
-import type { Manager } from "@/Manager";
+import type { Manager } from "@manager";
 
 export interface BaseModelConfig {
     managerInstance: Manager

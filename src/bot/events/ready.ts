@@ -1,4 +1,4 @@
-import { manager } from "@/Manager";
+import { manager } from "@manager";
 
 export default async function () {
     await manager.bot.uploadCommands();

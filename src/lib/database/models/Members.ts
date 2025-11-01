@@ -1,7 +1,7 @@
 import { sql } from "bun";
 import { BaseModel } from "@lib/database";
 import type { Exists, Member, MemberInsert } from "@lib/types";
-import type { Manager } from "@/Manager";
+import type { Manager } from "@manager";
 
 export class MembersModel extends BaseModel {
     public constructor(manager: Manager) {

@@ -1,4 +1,4 @@
-import { manager } from "@/Manager";
+import { manager } from "@manager";
 import { CommandInteraction, type AnyInteraction } from "eris";
 
 export default async function (interaction: AnyInteraction) {
