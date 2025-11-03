@@ -1,6 +1,7 @@
 import { sql } from "bun";
 import { BaseModel } from "@lib/database";
-import type { Guild, Exists, GuildInsert } from "@/lib/types";
+import { NULL_MARKER } from "@lib/constants";
+import type { Guild, Exists, GuildInsert } from "@lib/types";
 import type { Manager } from "@manager";
 
 export class GuildModel extends BaseModel {
@@ -25,6 +26,20 @@ export class GuildModel extends BaseModel {
 
         await this.manager.redis.set(cacheKey, JSON.stringify(guild));
         return guild;
+    }
+
+    public async getLocale(guildId: string): Promise<string | null> {
+        const cacheKey = this.generateCacheKey(guildId, 'locale');
+        const cachedData = await this.manager.redis.get(cacheKey);
+        if (cachedData) return cachedData !== NULL_MARKER ? cachedData : null;
+
+        const [row] = await sql<{ locale: string | null }[]>`
+            SELECT locale FROM guilds
+            WHERE discord_id = ${guildId}`;
+
+        const locale = row?.locale ?? null;
+        await this.manager.redis.set(cacheKey, locale ?? '__NULL__');
+        return locale;
     }
 
     async insert(guildId: string, locale?: string): Promise<Guild | null> {

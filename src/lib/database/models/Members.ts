@@ -1,5 +1,6 @@
 import { sql } from "bun";
 import { BaseModel } from "@lib/database";
+import { NULL_MARKER } from "@lib/constants";
 import type { Exists, Member, MemberInsert } from "@lib/types";
 import type { Manager } from "@manager";
 
@@ -25,6 +26,20 @@ export class MembersModel extends BaseModel {
 
         await this.manager.redis.set(cacheKey, JSON.stringify(member));
         return member;
+    }
+
+    public async getLocale(discordId: string, guildId: string): Promise<string | null> {
+        const cacheKey = this.generateCacheKey(discordId, guildId, 'locale');
+        const cachedData = await this.manager.redis.get(cacheKey);
+        if (cachedData) return cachedData !== NULL_MARKER ? cachedData : null;
+
+        const [row] = await sql<{ locale: string | null }[]>`
+            SELECT locale FROM members
+            WHERE discord_id = ${discordId} AND guild_id = ${guildId}`;
+
+        const locale = row?.locale ?? null;
+        await this.manager.redis.set(cacheKey, locale ?? '__NULL__');
+        return locale;
     }
 
     async insert(discordId: string, guildId: string): Promise<Member | null> {
