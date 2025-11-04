@@ -1,10 +1,11 @@
 import { sql } from "bun";
 import { readdir } from "node:fs/promises";
 import { Manager } from '@manager';
-import { MembersModel } from './models';
+import { GuildsModel, MembersModel } from '.';
 
 export class Database {
     private _members?: MembersModel;
+    private _guilds?: GuildsModel
     public constructor(private manager: Manager) {
         this.manager = manager;
     }
@@ -15,6 +16,14 @@ export class Database {
         }
 
         return this._members;
+    }
+
+    get Guilds(): GuildsModel {
+        if (!this._guilds) {
+            this._guilds = new GuildsModel(this.manager);
+        }
+
+        return this._guilds;
     }
 
     public async migrate(): Promise<void> {

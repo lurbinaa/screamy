@@ -4,7 +4,7 @@ import { NULL_MARKER } from "@lib/constants";
 import type { Guild, Exists, GuildInsert } from "@lib/types";
 import type { Manager } from "@manager";
 
-export class GuildModel extends BaseModel {
+export class GuildsModel extends BaseModel {
     public constructor(manager: Manager) {
         super({
             logContext: 'Guilds',
