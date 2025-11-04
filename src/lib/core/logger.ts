@@ -7,12 +7,10 @@ import pino, {
 } from "pino";
 import path from "path";
 import { prettyTransport } from "@lib/utils";
-
-/**          TODO: move to other file */
-export const isProduction = Bun.env.NODE_ENV === 'production';
+import { PRODUCTION } from "@lib/constants";
 
 const baseConfig: LoggerOptions = {
-    level: isProduction ? "info" : "debug",
+    level: PRODUCTION ? "info" : "debug",
     timestamp: () => `,"time":"${new Date(Date.now()).toISOString()}"`,
 };
 
@@ -22,7 +20,7 @@ const fileTransport = destination({
     sync: false,
 });
 
-const streams: StreamEntry[] = isProduction
+const streams: StreamEntry[] = PRODUCTION
     ? [{ stream: fileTransport, level: "info" }]
     : [
         { stream: fileTransport, level: "debug" },

@@ -1,7 +1,8 @@
 import { Client } from "eris";
-import { isProduction, withContext, type Logger } from "@lib/core";
-import type { CommandCollection, CommandExecutionsCollection } from "@/lib/types";
+import { withContext, type Logger } from "@lib/core";
 import { extractCommandFiles, getCommands, loadEvents } from "./handlers";
+import { PRODUCTION } from "@lib/constants";
+import type { CommandCollection, CommandExecutionsCollection } from "@lib/types";
 
 export class Bot extends Client {
     /**    `null` until commands are loaded */
@@ -39,7 +40,7 @@ export class Bot extends Client {
         }
 
         try {
-            if (isProduction) {
+            if (PRODUCTION) {
                 await this.bulkEditCommands(this.commands);
                 this.logger.info('Upload global commands');
             } else {

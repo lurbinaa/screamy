@@ -2,7 +2,7 @@ import { RedisClient } from "bun";
 import { Bot } from "@bot";
 import { Database } from "@lib/database";
 import { requiresInitGetter, InitializableClass } from "@lib/decorators";
-import { isProduction } from "./lib/core";
+import { PRODUCTION } from "@lib/constants";
 import type { ManagerInitOptions } from "@lib/types";
 
 export class Manager extends InitializableClass {
@@ -16,9 +16,8 @@ export class Manager extends InitializableClass {
         this.config = config;
 
         await this.bot.init();
+        await this.database.migrate();
         this._initialized = true;
-
-        if (isProduction) await this.database.migrate();
     }
 
     @requiresInitGetter

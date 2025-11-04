@@ -6,5 +6,3 @@ await manager.init({
         maxRetries: 5
     }
 });
-
-await manager.database.migrate();
