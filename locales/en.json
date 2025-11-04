@@ -2,7 +2,7 @@
     "bot": {
         "commands": {
             "ping": {
-                "pong": "Pong!"
+                "pong": "Pong!\n```yaml\ndiscord websocket: {{discord}}\npostgres: {{postgres}}ms\nredis: {{redis}}ms\n```"
             }
         }
     }

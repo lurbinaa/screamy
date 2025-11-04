@@ -5,6 +5,10 @@ export interface BaseModelConfig {
     logContext: string;
     cacheKey: string;
 }
+export interface PingResponse {
+    postgres: number;
+    redis: number;
+}
 export interface Team {
     id: number;
     name: string;

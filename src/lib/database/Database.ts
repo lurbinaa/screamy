@@ -1,7 +1,8 @@
-import { sql } from "bun";
+import { redis, sql } from "bun";
 import { readdir } from "node:fs/promises";
-import { Manager } from '@manager';
+import type { PingResponse } from "@lib/types";
 import { GuildsModel, MembersModel } from '.';
+import { Manager } from '@manager';
 
 export class Database {
     private _members?: MembersModel;
@@ -24,6 +25,23 @@ export class Database {
         }
 
         return this._guilds;
+    }
+
+    public async ping(): Promise<PingResponse> {
+        const p = () => performance.now();
+
+        const pgStart = p();
+        await sql`SELECT 1`;
+        const pgEnd = p();
+
+        const rStart = p();
+        await redis.ping();
+        const rEnd = p();
+
+        return {
+            postgres: pgEnd - pgStart,
+            redis: rEnd - rStart
+        }
     }
 
     public async migrate(): Promise<void> {
