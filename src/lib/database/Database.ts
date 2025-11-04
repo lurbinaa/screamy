@@ -27,12 +27,13 @@ export class Database {
     }
 
     public async migrate(): Promise<void> {
-        const files = await readdir('migrations');
+        const path = 'migrations';
+        const files = await readdir(path);
 
         for (const file of files) {
             if (!file.endsWith('.sql')) continue;
-            const query = await Bun.file(file).text();
-            await sql`${query}`;
+            const query = await Bun.file(`${path}/${file}`).text();
+            await sql.unsafe(query);
         }
     }
 }

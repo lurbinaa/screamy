@@ -23,14 +23,14 @@ CREATE TABLE IF NOT EXISTS members (
     player_id INT REFERENCES players(id) ON DELETE SET NULL,
     locale VARCHAR(2),
     created_at TIMESTAMP DEFAULT NOW(),
-    PRIMARY KEY (discord_id, guild, id)
+    PRIMARY KEY (discord_id, guild_id)
 );
 
 -- Discord guilds
 CREATE TABLE IF NOT EXISTS guilds (
     discord_id VARCHAR(30) UNIQUE NOT NULL,
     locale VARCHAR(2)
-)
+);
 
 CREATE INDEX IF NOT EXISTS idx_members_discord_guild ON members(discord_id, guild_id);
 CREATE INDEX IF NOT EXISTS idx_players_tag ON players(tag);
