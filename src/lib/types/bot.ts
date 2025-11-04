@@ -1,8 +1,11 @@
+import type { CommandCtx } from "@bot";
 import type {
     CommandInteraction,
     ApplicationCommandCreateOptions,
     ApplicationCommandOptionsSubCommand,
-    ApplicationCommandOptionsSubCommandGroup
+    ApplicationCommandOptionsSubCommandGroup,
+    InteractionContent,
+    FileContent
 } from "eris";
 import type Constants from "eris/lib/Constants";
 
@@ -19,7 +22,7 @@ export type Command<T extends CommandTypes | void = void> =
     ApplicationCommandCreateOptions<true, Constants["ApplicationCommandTypes"]["CHAT_INPUT"]> |
     ApplicationCommandOptionsSubCommand |
     ApplicationCommandOptionsSubCommandGroup;
-export type Execute = (interaction: CommandInteraction) => Promise<void>;
+export type Execute = (context: CommandCtx) => Promise<void>;
 export type RawCommand<T extends CommandTypes | void = void> = Omit<Command<T>, 'name'> & {
     execute?: Execute
 }
@@ -29,6 +32,10 @@ export type {
     ApplicationCommandOptionsSubCommand,
     ApplicationCommandOptionsSubCommandGroup
 }
+export type CtxReplyContent = string | InteractionContent;
+export type CtxSilentReplyContent = string | Omit<InteractionContent, 'flags'>;
+export type CtxTOptions = { [key: string]: unknown };
+export type CtxReplyFile = FileContent | FileContent;
 
 export interface CommandFile {
     path: string;

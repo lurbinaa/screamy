@@ -7,10 +7,10 @@
         "baseUrl": "./",
         "paths": {
             "@manager": ["src/Manager.ts"],
-            "@/*": ["src/*"],
             "@lib/*": ["src/lib/*"],
             "@bot": ["src/bot/index.ts"],
-            "@bot/*": ["src/bot/*"]
+            "@bot/*": ["src/bot/*"],
+            "@/*": ["src/*"]
         },
 
         "moduleResolution": "bundler",

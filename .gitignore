@@ -5,3 +5,4 @@ logs/
 .env
 test.js
 test.ts
+testing.session.sql
