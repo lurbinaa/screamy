@@ -10,7 +10,7 @@ export class Database {
         this.manager = manager;
     }
 
-    get Members(): MembersModel {
+    get members(): MembersModel {
         if (!this._members) {
             this._members = new MembersModel(this.manager);
         }
@@ -18,7 +18,7 @@ export class Database {
         return this._members;
     }
 
-    get Guilds(): GuildsModel {
+    get guilds(): GuildsModel {
         if (!this._guilds) {
             this._guilds = new GuildsModel(this.manager);
         }
