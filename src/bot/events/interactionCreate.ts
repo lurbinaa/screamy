@@ -19,21 +19,30 @@ export default async function (interaction: AnyInteraction): Promise<void> {
 
         const name = getNameKey(interaction.data);
         const executeFn = manager.bot.commandExecutions.get(name);
-
         if (!executeFn) {
-            manager.bot.logger.error(interaction.data, 'Command not found in execution collection')
+            manager.bot.logger.error({ name }, 'Command not found in execution collection')
             return context.silentReply('bot.errors.command_not_found');
         }
 
-        await executeFn(context);
-        manager.bot.logger.debug(
-            {
-                name,
-                guild: interaction.guildID,
-                channel: interaction.channel.id
-            },
-            'Command ran'
-        );
+        try {
+            await executeFn(context);
+            manager.bot.logger.debug(
+                {
+                    name,
+                    guild: interaction.guildID,
+                    channel: interaction.channel.id
+                },
+                'Command ran'
+            );
+        } catch (error) {
+            manager.bot.logger.error(error, 'Command failed to execute properly');
+            return context.reply('bot.errors.execute_failed', {
+                error: Bun.inspect(error, {
+                    colors: false,
+                    depth: 5
+                })
+            });
+        }
     }
 }
 
@@ -53,7 +62,6 @@ function getNameKey(data: CommandInteractionData): string {
 
     const keys = [data.name, first.name];
     if (first.type === SUB_COMMAND_GROUP && child?.name) keys.push(child.name);
-
     return keys.join("-");
 }
 
