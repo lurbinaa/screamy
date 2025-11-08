@@ -21,7 +21,7 @@ export async function getCommands(commandFiles: CommandFile[]): Promise<GetComma
 
         if (!data || !name) continue;
 
-        executeCollection.set(raw.keys.join('-'), data.execute!); // keys in kebab-case
+        executeCollection.set(raw.keys.reverse().join('-'), data.execute!); // keys in kebab-case
         delete data.execute;
         data.description ??= 'No description';
 
@@ -38,7 +38,8 @@ export async function getCommands(commandFiles: CommandFile[]): Promise<GetComma
                 const option = {
                     name,
                     description: data.description,
-                    type: CommandTypes.SubCommand
+                    type: CommandTypes.SubCommand,
+                    options: data.options
                 } as ApplicationCommandOptionsSubCommand;
 
                 if (!parent) {
