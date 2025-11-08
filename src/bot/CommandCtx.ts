@@ -3,6 +3,9 @@ import {
     type Message,
     type CommandInteraction,
     type InteractionContent,
+    type CommandInteractionData,
+    type InteractionDataOptions,
+    type TextableChannel,
 } from "eris";
 import i18next from "i18next";
 import type {
@@ -16,6 +19,18 @@ const { EPHEMERAL } = Constants.MessageFlags
 
 export class CommandCtx {
     public constructor(public interaction: CommandInteraction, public locale: string | null) { };
+
+    public get data(): CommandInteractionData {
+        return this.interaction.data;
+    }
+
+    public get channel(): TextableChannel {
+        return this.interaction.channel
+    }
+
+    public get options(): InteractionDataOptions[] | undefined {
+        return this.data.options;
+    }
 
     public async reply(content: CtxReplyContent, tOptions?: CtxTOptions, file?: CtxReplyFile): Promise<void> {
         const _content = this.getContent(content, false, tOptions);

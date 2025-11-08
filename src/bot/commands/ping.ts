@@ -1,7 +1,8 @@
+import type { RawCommand } from "@lib/types";
 import { CommandCtx } from "@bot";
 import { manager } from "@manager";
 
-export default {
+const PingCommand: RawCommand = {
     description: 'Ping command',
     execute: async (context: CommandCtx): Promise<void> => {
         await context.defer();
@@ -16,3 +17,5 @@ export default {
         });
     }
 };
+
+export default PingCommand;

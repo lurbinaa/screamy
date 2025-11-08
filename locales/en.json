@@ -2,7 +2,12 @@
     "bot": {
         "commands": {
             "ping": {
-                "pong": "Pong!\n```yaml\ndiscord websocket: {{discord}}\npostgres: {{postgres}}ms\nredis: {{redis}}ms\n```"
+                "pong": "TEST\n```yaml\ndiscord websocket: {{discord}}\npostgres: {{postgres}}ms\nredis: {{redis}}ms\n```"
+            },
+            "eval": {
+                "message_not_found": "Message not found",
+                "success": "```js\n{{out}}\n```",
+                "error": "```yaml\n{{error}}\n```"
             }
         }
     }

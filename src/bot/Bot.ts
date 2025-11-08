@@ -10,13 +10,6 @@ export class Bot extends Client {
     public commandExecutions: CommandExecutionsCollection | null;
     public logger: Logger
 
-    /**        websocket latency */
-    public get latency() {
-        const shard = this.shards.get(0);
-        if (!shard) return -1;
-        return shard.latency;
-    }
-
     public constructor() {
         super(Bun.env.DISCORD_BOT_TOKEN!, {
             intents: ["guilds", "guildMessages"]
@@ -25,6 +18,13 @@ export class Bot extends Client {
         this.commands = null;
         this.commandExecutions = null;
         this.logger = withContext('Bot');
+    }
+
+    /**        websocket latency */
+    public get latency() {
+        const shard = this.shards.get(0);
+        if (!shard) return -1;
+        return shard.latency;
     }
 
     public async init(): Promise<void> {
